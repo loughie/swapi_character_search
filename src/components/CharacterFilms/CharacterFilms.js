@@ -3,6 +3,17 @@ import axios from 'axios';
 import { StyleSheet, css } from 'aphrodite';
 import SearchResultSquare from '../SearchResultSquare/SearchResultSquare'
 
+const styles = StyleSheet.create({
+  list: {
+    display: 'grid',
+    alignContent: 'center',
+    justifyContent: 'center',
+    gridTemplateColumns: '1fr',
+    gridGap: '15px',
+    padding: '20px',
+  }
+});
+
 export default class CharacterFilms extends React.Component {
 
   constructor(props) {
@@ -15,21 +26,24 @@ export default class CharacterFilms extends React.Component {
   }
 
   componentDidMount() {
-    this.getfilms()
+    this.getfilms();
   }
 
+  // If props are new - set state to new props, reset array and trigger get films in cb
   componentWillReceiveProps(nextProps) {
     this.setState({
       films: nextProps.selectedCharacter.films,
       filmTitles: []
     }, () => {
-      this.getfilms()
-    })
+      this.getfilms();
+    });
   }
 
+  // Gets characters films appeared in. stores urls and passes to axios.all
+  // stores response in array which is then set to state for mapping.
   getfilms = () => {
-    const filmTitles = []
-    const axiosPromises = []
+    const filmTitles = [];
+    const axiosPromises = [];
     this.state.films.forEach((url) => {
       axiosPromises.push(axios.get(url))
     })
@@ -51,22 +65,9 @@ export default class CharacterFilms extends React.Component {
     return (
       <SearchResultSquare title="Features In...">
         <ul className={css(styles.list)}>
-          {filmTitles.map((item) => {
-            return <li>{item}</li>
-          })}
+          {filmTitles.map(item => <li>{item}</li>)}
         </ul>
       </SearchResultSquare>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  list: {
-    display: 'grid',
-    alignContent: 'center',
-    justifyContent: 'center',
-    gridTemplateColumns: '1fr',
-    gridGap: '15px',
-    padding: '20px',
-  }
-});

@@ -23,8 +23,9 @@ export default class App extends React.Component {
     error: null
   };
 
-  // Starts initial get request for people in prod and uses local array in dev for speed
+  // Starts initial get request for characters
   componentWillMount() {
+    // If in development mode characters are set to local data for no loading time
     if (process.env.NODE_ENV === 'development') {
       this.setState({
         characters: devCharacters,
